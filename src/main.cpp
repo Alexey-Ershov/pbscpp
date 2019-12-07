@@ -4,20 +4,33 @@
 
 int main()
 {
-    /*std::unique_ptr<TFunction> p {new TIdent};
-    std::cout << "DEBUG: " << p->toString() << std::endl;
-
-    p = std::make_unique<TConst>();
-    std::cout << "DEBUG: " << p->toString() << std::endl;*/
-
-
-    TFactory funcFactory;
+    TFactory func_factory;
+    using TFunctionPtr = std::shared_ptr<TFunction>;
+    std::vector<TFunctionPtr> cont;
     
-    auto f = funcFactory.createObject("ident");
-    std::cout << f->toString() << std::endl;
+    auto i = func_factory.createObject("ident");
+    cont.emplace_back(std::move(i));
 
-    auto g = funcFactory.createObject("const");
-    std::cout << g->toString() << std::endl;
+    auto c = func_factory.createObject("const", 1.5);
+    cont.emplace_back(std::move(c));
+
+    auto p = func_factory.createObject("power", 1);
+    cont.emplace_back(std::move(p));
+
+    auto e = func_factory.createObject("exp");
+    cont.emplace_back(std::move(e));
+
+    auto pol = func_factory.createObject("polynomial", { 0, 2, 3, 0, 4 });
+    cont.emplace_back(std::move(pol));
+
+    for (const auto ptr: cont) {
+        if (ptr) {
+            std::cout << "DEBUG: " << ptr->toString() << std::endl;
+
+        } else {
+            std::cerr << "Unregistered function" << std::endl;
+        }
+    }
 
     return 0;
 }

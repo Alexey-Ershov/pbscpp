@@ -23,7 +23,7 @@ fact_impl.o: $(FACT_HEADER) $(FACT_IMPL)
 	            -o fact_impl.o \
 	            $(FACT_IMPL)
 
-main.o: $(FUNC_HEADER) $(MAIN)
+main.o: $(FUNC_HEADER) $(FACT_HEADER) $(MAIN)
 	$(COMPILER) $(CFLAGS) \
 	            -c \
 	            -o main.o \
