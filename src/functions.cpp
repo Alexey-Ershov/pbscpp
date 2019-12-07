@@ -1,5 +1,7 @@
 #include "functions.hpp"
 
+#include <cmath>
+
 #include <sstream>
 
 
@@ -10,37 +12,37 @@ const std::string IPolynomial::toString() const
     }
     std::cerr << std::endl;*/
 
-    std::stringstream result;
-    result << "f(x) = ";
+    std::stringstream res;
+    res << "f(x) = ";
 
-    /*std::cerr << "DEBUG" << __LINE__  << ": " << result.str() << std::endl;*/
+    /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
 
     if (coeff_vect_.at(0) != 0) {
         if (coeff_vect_.at(0) != 1) {
-            result << coeff_vect_.at(0)
+            res << coeff_vect_.at(0)
                    << "*";
         }
 
-        result << "exp(x)";
+        res << "exp(x)";
 
         if (coeff_vect_.size() > 1) {
-            result << " + ";
+            res << " + ";
         }
     }
 
     for (unsigned i = 1; i < coeff_vect_.size(); i++) {
         if (i == 1) {
-            /*std::cerr << "DEBUG" << __LINE__  << ": " << result.str() << std::endl;*/
+            /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
             if (coeff_vect_.at(i) != 0 or 
                     (coeff_vect_.size() == 2 and coeff_vect_.at(0) == 0)) {
                 
-                result << coeff_vect_.at(i);
+                res << coeff_vect_.at(i);
 
                 if (i + 1 < coeff_vect_.size()) {
-                    result << " + ";
+                    res << " + ";
                 }
             }
-            /*std::cerr << "DEBUG" << __LINE__  << ": " << result.str() << std::endl;*/
+            /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
 
         } else {
             if (coeff_vect_.at(i) == 0) {
@@ -48,24 +50,52 @@ const std::string IPolynomial::toString() const
             }
 
             if (coeff_vect_.at(i) != 1) {
-                result << coeff_vect_.at(i)
+                res << coeff_vect_.at(i)
                        << "*";
             }
 
-            result << "x";
+            res << "x";
 
             if (i > 2) {
-                result << "^"
+                res << "^"
                        << i - 1;
             }
 
             if (i + 1 < coeff_vect_.size()) {
-                result << " + ";
+                res << " + ";
             }
         }
 
-        /*std::cerr << "DEBUG" << __LINE__  << ": " << result.str() << std::endl;*/
+        /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
     }
 
-    return result.str();
+    return res.str();
+}
+
+double IPolynomial::operator()(double x) const
+{
+    double res = 0;
+
+    for (unsigned i = 0; i < coeff_vect_.size(); i++) {
+        switch (i) {
+          case 0: {
+            res += coeff_vect_[i] * exp(x);
+            break;
+          }
+          case 1: {
+            res += coeff_vect_[i];
+            break;
+          }
+          case 2: {
+            res += coeff_vect_[i] * x;
+            break;
+          }
+          default: {
+            res += coeff_vect_[i] * pow(x, i - 1);
+            break;
+          }
+        }
+    }
+
+    return res;
 }

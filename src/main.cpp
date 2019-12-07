@@ -14,7 +14,7 @@ int main()
     auto c = func_factory.createObject("const", 1.5);
     cont.emplace_back(std::move(c));
 
-    auto p = func_factory.createObject("power", 1);
+    auto p = func_factory.createObject("power", 3);
     cont.emplace_back(std::move(p));
 
     auto e = func_factory.createObject("exp");
@@ -25,7 +25,15 @@ int main()
 
     for (const auto ptr: cont) {
         if (ptr) {
-            std::cout << "DEBUG: " << ptr->toString() << std::endl;
+            std::cout << ptr->toString() << std::endl;
+
+            double x = 10;
+            std::cout << "f("
+                      << x
+                      << ") = "
+                      << (*ptr)(x)
+                      << "\n"
+                      << std::endl;
 
         } else {
             std::cerr << "Unregistered function" << std::endl;

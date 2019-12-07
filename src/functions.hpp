@@ -11,13 +11,10 @@
 class TFunction
 {
 public:
-    /*TFunction() = default;
-    TFunction(double opt) {}
-    TFunction(const std::vector<double>& opt) {}*/
     virtual ~TFunction() = default;
 
-    /*virtual double operator()() const = 0;
-    virtual double getDeriv() const = 0;*/
+    virtual double operator()(double x) const = 0;
+    /*virtual double getDeriv() const = 0;*/
     virtual const std::string toString() const = 0;
 };
 
@@ -27,12 +24,12 @@ protected:
     std::vector<double> coeff_vect_;
 
     IPolynomial() = default;
-
     IPolynomial(const std::vector<double> c_v)
         : coeff_vect_ { c_v }
     {}
 
-    virtual const std::string toString() const override;
+    virtual const std::string toString() const override final;
+    virtual double operator()(double x) const override final;
 };
 
 class TIdent : public IPolynomial
