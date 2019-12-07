@@ -99,3 +99,24 @@ double IPolynomial::operator()(double x) const
 
     return res;
 }
+
+double IPolynomial::getDeriv(double x) const
+{
+    double res = 0;
+
+    for (unsigned i = 0; i < coeff_vect_.size(); i++) {
+        if (i == 0) {
+            res += coeff_vect_[i] * exp(x);
+        
+        } else {
+            if (i == 1) {
+                res += coeff_vect_[i] * (i - 1);
+            
+            } else {
+                res += coeff_vect_[i] * (i - 1) * pow(x, i - 2);
+            }
+        }
+    }
+
+    return res;
+}

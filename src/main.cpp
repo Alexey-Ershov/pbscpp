@@ -28,10 +28,17 @@ int main()
             std::cout << ptr->toString() << std::endl;
 
             double x = 10;
+            
             std::cout << "f("
                       << x
                       << ") = "
                       << (*ptr)(x)
+                      << std::endl;
+
+            std::cout << "df/dx ("
+                      << x
+                      << ") = "
+                      << ptr->getDeriv(x)
                       << "\n"
                       << std::endl;
 

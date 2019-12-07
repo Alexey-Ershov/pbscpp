@@ -13,9 +13,9 @@ class TFunction
 public:
     virtual ~TFunction() = default;
 
-    virtual double operator()(double x) const = 0;
-    /*virtual double getDeriv() const = 0;*/
     virtual const std::string toString() const = 0;
+    virtual double operator()(double x) const = 0;
+    virtual double getDeriv(double x) const = 0;
 };
 
 class IPolynomial : public TFunction
@@ -30,6 +30,7 @@ protected:
 
     virtual const std::string toString() const override final;
     virtual double operator()(double x) const override final;
+    virtual double getDeriv(double x) const override final;
 };
 
 class TIdent : public IPolynomial
