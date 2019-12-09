@@ -8,6 +8,8 @@
 #include <map>
 
 
+// Factory class.
+// I hope its code is obvious.
 class TFactory
 {
 private:
@@ -18,11 +20,11 @@ private:
         {
         public:
             virtual ~ICreator() = default;
-            virtual std::unique_ptr<TFunction> create() const = 0;
-            virtual std::unique_ptr<TFunction> create(double opt) const = 0;
-            virtual std::unique_ptr<TFunction> create(int opt) const = 0;
-            virtual std::unique_ptr<TFunction> create(
-                    const std::vector<double>& opt) const = 0;
+            virtual std::unique_ptr<IPolynomial> create() const = 0;
+            virtual std::unique_ptr<IPolynomial> create(double opt) const = 0;
+            virtual std::unique_ptr<IPolynomial> create(int opt) const = 0;
+            virtual std::unique_ptr<IPolynomial> create(
+                    const VectOfDouble& opt) const = 0;
         };
         
         using TCreatorPtr = std::shared_ptr<ICreator>;
@@ -34,24 +36,24 @@ private:
         template<class T>
         class TCreator : public ICreator
         {
-            virtual std::unique_ptr<TFunction> create() const override
+            virtual std::unique_ptr<IPolynomial> create() const override
             {
                 return std::make_unique<T>();
             }
 
-            virtual std::unique_ptr<TFunction> create(double opt)
+            virtual std::unique_ptr<IPolynomial> create(double opt)
                     const override
             {
                 return std::make_unique<T>(opt);
             }
             
-            virtual std::unique_ptr<TFunction> create(int opt) const override
+            virtual std::unique_ptr<IPolynomial> create(int opt) const override
             {
                 return std::make_unique<T>(opt);
             }
             
-            virtual std::unique_ptr<TFunction> create(
-                    const std::vector<double>& opt) const override
+            virtual std::unique_ptr<IPolynomial> create(
+                    const VectOfDouble& opt) const override
             {
                 return std::make_unique<T>(opt);
             }
@@ -77,7 +79,7 @@ private:
             registerCreator<TPolynomial>("polynomial");
         }
 
-        std::unique_ptr<TFunction> createObject(const std::string& name) const
+        std::unique_ptr<IPolynomial> createObject(const std::string& name) const
         {
             auto creator = registered_creators_.find(name);
             if (creator == registered_creators_.end()) {
@@ -87,7 +89,7 @@ private:
             return creator->second->create();
         }
 
-        std::unique_ptr<TFunction> createObject(
+        std::unique_ptr<IPolynomial> createObject(
                 const std::string& name, 
                 const std::initializer_list<double>& opts) const
         {
@@ -100,7 +102,7 @@ private:
         }
 
         template<class T>
-        std::unique_ptr<TFunction> createObject(const std::string& name,
+        std::unique_ptr<IPolynomial> createObject(const std::string& name,
                                                 const T& opts) const
         {
             auto creator = registered_creators_.find(name);
@@ -108,10 +110,7 @@ private:
                 return nullptr;
             }
             
-            /*if (name == "ident" or name == "exp") {*/
-                return creator->second->create(opts);
-            
-            /*} else if (name == )*/
+            return creator->second->create(opts);
         }
 
         std::vector<std::string> getAvailableObjects() const
@@ -128,15 +127,17 @@ private:
     std::unique_ptr<const TImpl> impl;
 
 public:
-    TFactory();
-    ~TFactory();
+    TFactory()
+        : impl { std::make_unique<TFactory::TImpl>() }
+    {}
+    ~TFactory() = default;
     
-    std::unique_ptr<TFunction> createObject(const std::string& name) const
+    std::unique_ptr<IPolynomial> createObject(const std::string& name) const
     {
         return impl->createObject(name);
     }
 
-    std::unique_ptr<TFunction> createObject(
+    std::unique_ptr<IPolynomial> createObject(
             const std::string& name, 
             const std::initializer_list<double>& opts) const
     {
@@ -144,13 +145,16 @@ public:
     }
 
     template<class T>
-    std::unique_ptr<TFunction> createObject(const std::string& name,
-                                            const T& opts) const
+    std::unique_ptr<IPolynomial> createObject(const std::string& name,
+                                              const T& opts) const
     {
         return impl->createObject(name, opts);
     }
 
-    std::vector<std::string> getAvailableObjects() const;
+    std::vector<std::string> getAvailableObjects() const
+    {
+        return impl->getAvailableObjects();
+    }
 };
 
 

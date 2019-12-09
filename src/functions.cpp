@@ -7,16 +7,10 @@
 
 const std::string IPolynomial::toString() const
 {
-    /*for (const auto& it: coeff_vect_) {
-        std::cerr << it << " ";
-    }
-    std::cerr << std::endl;*/
-
     std::stringstream res;
     res << "f(x) = ";
 
-    /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
-
+    // If there is an exponent part.
     if (coeff_vect_.at(0) != 0) {
         if (coeff_vect_.at(0) != 1) {
             res << coeff_vect_.at(0)
@@ -30,9 +24,9 @@ const std::string IPolynomial::toString() const
         }
     }
 
+    // For every coefficient print corresponding string representation.
     for (unsigned i = 1; i < coeff_vect_.size(); i++) {
         if (i == 1) {
-            /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
             if (coeff_vect_.at(i) != 0 or 
                     (coeff_vect_.size() == 2 and coeff_vect_.at(0) == 0)) {
                 
@@ -42,7 +36,6 @@ const std::string IPolynomial::toString() const
                     res << " + ";
                 }
             }
-            /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
 
         } else {
             if (coeff_vect_.at(i) == 0) {
@@ -65,8 +58,6 @@ const std::string IPolynomial::toString() const
                 res << " + ";
             }
         }
-
-        /*std::cerr << "DEBUG" << __LINE__  << ": " << res.str() << std::endl;*/
     }
 
     return res.str();
@@ -76,6 +67,7 @@ double IPolynomial::operator()(double x) const
 {
     double res = 0;
 
+    // Compute function value in for loop.
     for (unsigned i = 0; i < coeff_vect_.size(); i++) {
         switch (i) {
           case 0: {
@@ -104,6 +96,7 @@ double IPolynomial::getDeriv(double x) const
 {
     double res = 0;
 
+    // Compute derivative value in for loop.
     for (unsigned i = 0; i < coeff_vect_.size(); i++) {
         if (i == 0) {
             res += coeff_vect_[i] * exp(x);
@@ -115,6 +108,37 @@ double IPolynomial::getDeriv(double x) const
             } else {
                 res += coeff_vect_[i] * (i - 1) * pow(x, i - 2);
             }
+        }
+    }
+
+    return res;
+}
+
+
+VectOfDouble vectAddition(const VectOfDouble& lhs, const VectOfDouble& rhs)
+{
+    // Check for the longest vector.
+    bool l_longer_r = false;
+    if (lhs.size() > rhs.size()) {
+        l_longer_r = true;
+    }
+
+    // Copy the longest vector.
+    VectOfDouble res;
+    if (l_longer_r) {
+        res = std::move(lhs);
+    
+    } else {
+        res = std::move(rhs);
+    }
+
+    // Add every element of the vectors.
+    for (unsigned i = 0; i < std::min(lhs.size(), rhs.size()); i++) {
+        if (l_longer_r) {
+            res[i] += rhs[i];
+        
+        } else {
+            res[i] += lhs[i];
         }
     }
 
