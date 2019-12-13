@@ -1,7 +1,5 @@
 #include "functions.hpp"
 
-
-
 #include <sstream>
 
 

@@ -23,7 +23,7 @@ VectOfDouble vectAddition(const VectOfDouble& lhs, const VectOfDouble& rhs);
 class TFunction
 {
 public:
-    using Functor = std::function<double(/*const TFunction&, */double)>;
+    using Functor = std::function<double(double)>;
     
     virtual ~TFunction() = default;
 
