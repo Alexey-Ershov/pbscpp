@@ -118,13 +118,8 @@ protected:
             if (i == 0) {
                 res += coeff_vect_[i] * exp(x);
             
-            } else {
-                if (i == 1) {
-                    res += coeff_vect_[i] * (i - 1);
-                
-                } else {
+            } else if (i > 1) {
                     res += coeff_vect_[i] * (i - 1) * pow(x, i - 2);
-                }
             }
         }
 

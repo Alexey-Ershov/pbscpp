@@ -65,14 +65,6 @@ const std::string IPolynomial::toString() const
 
 double IPolynomial::operator()(double x) const
 {
-    /*double res = 0.0;
-
-    for (const auto& f: get_val_ftor_) {
-        res += f(*this, x);
-    }
-
-    return res;*/
-
     return get_val_ftor_(x);
 }
 
