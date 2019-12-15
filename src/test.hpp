@@ -14,6 +14,7 @@
 #define EPS 0.001
 
 
+// Utility function to generate the coefficients of the polynom.
 VectOfDouble genPolyCoeffs()
 {
     std::srand(static_cast<unsigned int>(time(0)));
@@ -28,6 +29,7 @@ VectOfDouble genPolyCoeffs()
     return res;
 }
 
+// Utility function to get the string representation of the polynom.
 std::string getPolyStrRepr(const VectOfDouble& coeff_vect)
 {
     std::stringstream res;
@@ -69,6 +71,7 @@ std::string getPolyStrRepr(const VectOfDouble& coeff_vect)
     return res.str();
 }
 
+// Utility function to get the value of the polynom.
 double getPolyVal(const VectOfDouble& coeff_vect, double x)
 {
     double res = 0;
@@ -94,6 +97,7 @@ double getPolyVal(const VectOfDouble& coeff_vect, double x)
     return res;
 }
 
+// Utility function to get the derivative value of the polynom.
 double getPolyDeriv(const VectOfDouble& coeff_vect, double x)
 {
     double res = 0;
@@ -108,11 +112,15 @@ double getPolyDeriv(const VectOfDouble& coeff_vect, double x)
     return res;
 }
 
+// Utility function to get the derivative value of function of the form
+// f(x) * g(x).
 double getMulDeriv(double df, double dg, double f, double g)
 {
     return df * g + f * dg;
 }
 
+// Utility function to get the derivative value of function of the form
+// f(x) / g(x).
 double getDivDeriv(double df, double dg, double f, double g)
 {
     return (df * g - f * dg) / (g * g);

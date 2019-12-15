@@ -78,6 +78,7 @@ protected:
     // where c0, c1, ... are elements of coeff_vect_.
     VectOfDouble coeff_vect_;
 
+    // Get value lambda function for basic functions.
     Functor basic_get_val_lambda_ =
     [this](double x)
     {
@@ -108,6 +109,7 @@ protected:
         return res;
     };
 
+    // Get derivative lambda function for basic functions.
     Functor basic_get_deriv_lambda_ =
     [this](double x)
     {

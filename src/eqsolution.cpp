@@ -8,6 +8,8 @@ std::optional<double> EqSolver::get_alpha(double x,
                                           double b0,
                                           unsigned recur_depth)
 {
+    // If the current recursion depth is zero return {} as the  impossibility
+    // of finding the minimum point.
     if (recur_depth == 0) {
         return {};
     }
@@ -17,12 +19,14 @@ std::optional<double> EqSolver::get_alpha(double x,
     double a_k = a0;
     double b_k = b0;
 
+    // The function to minimize for the steepest descent.
     auto g =
     [this](double x, double alpha)
     {
         return abs_fun_(x - alpha * abs_fun_.getDeriv(x));
     };
     
+    // While a_k and b_k are not close iterate.
     do {
         double l_k = (a_k + b_k - delta) / 2;
         double m_k = (a_k + b_k + delta) / 2;
@@ -30,6 +34,8 @@ std::optional<double> EqSolver::get_alpha(double x,
         double g_l_k = g(x, l_k);
         double g_m_k = g(x, m_k);
 
+        // If at least one function value is too huge call the function
+        // reccurently.
         if (std::isnan(g_l_k) or std::isnan(g_m_k)) {
             double length = std::abs(b0 - a0);
             double new_a0 = a0 + length / 4;
@@ -67,6 +73,7 @@ std::optional<double> EqSolver::gr_descent()
 
         x[k + 1] = x.at(k) - alpha.value() * abs_fun_.getDeriv(x.at(k));
 
+        // Stop the iterations if function value is close to zero.
         if (std::abs(abs_fun_(x.at(k))) < eps_) {
             return x.at(k);
         }
@@ -80,6 +87,8 @@ std::optional<double> EqSolver::solveEquation(const IPolynomial& f)
 {
     f_ = f;
 
+    // Redefine the functors to get the minimum point of the function
+    // |f(x)|. That is the root of equation of the form f(x) = 0.
     TFunction::Functor new_get_val_ftor_ =
     [this](double x)
     {
