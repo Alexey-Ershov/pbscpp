@@ -1,7 +1,5 @@
 #include "functions.hpp"
 
-#include <cmath>
-
 #include <sstream>
 
 
@@ -63,55 +61,16 @@ const std::string IPolynomial::toString() const
     return res.str();
 }
 
+
+
 double IPolynomial::operator()(double x) const
 {
-    double res = 0;
-
-    // Compute function value in for loop.
-    for (unsigned i = 0; i < coeff_vect_.size(); i++) {
-        switch (i) {
-          case 0: {
-            res += coeff_vect_[i] * exp(x);
-            break;
-          }
-          case 1: {
-            res += coeff_vect_[i];
-            break;
-          }
-          case 2: {
-            res += coeff_vect_[i] * x;
-            break;
-          }
-          default: {
-            res += coeff_vect_[i] * pow(x, i - 1);
-            break;
-          }
-        }
-    }
-
-    return res;
+    return get_val_ftor_(x);
 }
 
 double IPolynomial::getDeriv(double x) const
 {
-    double res = 0;
-
-    // Compute derivative value in for loop.
-    for (unsigned i = 0; i < coeff_vect_.size(); i++) {
-        if (i == 0) {
-            res += coeff_vect_[i] * exp(x);
-        
-        } else {
-            if (i == 1) {
-                res += coeff_vect_[i] * (i - 1);
-            
-            } else {
-                res += coeff_vect_[i] * (i - 1) * pow(x, i - 2);
-            }
-        }
-    }
-
-    return res;
+    return get_deriv_ftor_(x);
 }
 
 
@@ -144,3 +103,4 @@ VectOfDouble vectAddition(const VectOfDouble& lhs, const VectOfDouble& rhs)
 
     return res;
 }
+
